@@ -31,7 +31,8 @@ document.addEventListener("keyup", (e) => {
 let platforms = [
   { x: 0, y: 350, width: 4000, height: 50 },
   { x: 200, y: 280, width: 100, height: 20 },
-  { x: 350, y: 250, width: 100, height: 20 }
+  { x: 350, y: 250, width: 100, height: 20 },
+  { x: 600, y: 200, width: 150, height: 20 }
 ];
 
 function update() {
