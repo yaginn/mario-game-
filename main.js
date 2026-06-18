@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -35,25 +34,30 @@ let platforms = [
   { x: 600, y: 200, width: 150, height: 20 }
 ];
 
+// 敵
+let enemies = [
+  { x: 700, y: 310, width: 40, height: 40, dx: 2 }
+];
+
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 移動コマンド
+  // 移動
   if (keys["ArrowRight"]) {
     player.x += 5;
-    cameraX += 5; // ←スクロール
+    cameraX += 5;
   }
   if (keys["ArrowLeft"]) {
     player.x -= 5;
     cameraX -= 5;
   }
 
-  // ジャンプコマンド
+  // ジャンプ
   if (keys[" "] && player.dy === 0) {
     player.dy = player.jump;
   }
 
-  // 重力設定
+  // 重力
   player.dy += player.gravity;
   player.y += player.dy;
 
@@ -78,13 +82,41 @@ function update() {
     player.dy = 0;
   }
 
-  // 地面描画（カメラ適用）
+  //敵の動き
+  enemies.forEach(e => {
+    e.x += e.dx;
+
+    if (e.x < 400 || e.x > 700) {
+      e.dx *= -1;
+    }
+  });
+
+  //敵との当たり判定
+  enemies.forEach((e, index) => {
+    if (
+      player.x < e.x + e.width &&
+      player.x + player.width > e.x &&
+      player.y < e.y + e.height &&
+      player.y + player.height > e.y
+    ) {
+      alert("残念ッッッッッッ！！");
+      location.reload();
+    }
+  });
+
+  // 地面描画
   ctx.fillStyle = "green";
   platforms.forEach(p => {
     ctx.fillRect(p.x - cameraX, p.y, p.width, p.height);
   });
 
-  // キャラ描画（カメラ適用）
+  // 敵描画
+  ctx.fillStyle = "black";
+  enemies.forEach(e => {
+    ctx.fillRect(e.x - cameraX, e.y, e.width, e.height);
+  });
+
+  // キャラ描画
   ctx.fillStyle = "red";
   ctx.fillRect(player.x - cameraX, player.y, player.width, player.height);
 
@@ -92,3 +124,4 @@ function update() {
 }
 
 update();
+
